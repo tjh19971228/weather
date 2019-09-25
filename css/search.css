@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+}
+.container {
+  width: 100%;
+  height: 667px;
+  overflow: hidden;
+  background: #fff;
+}
+.title {
+  text-align: center;
+  font-size: 40px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  color: #6c5482;
+  font-weight: bold;
+}
+#search {
+  width: 70%;
+  height: 5%;
+  margin: 0 auto;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding-left: 10%;
+  line-height: 32px;
+  border-radius: 20px;
+  border: 1px #6c5482 solid;
+  outline: none;
+}
+.search-icon {
+  position: absolute;
+  margin-left: 50px;
+  margin-top: 10px;
+  font-size: 30px;
+  color: #aaa;
+}
+.gif {
+  width: 100%;
+  margin-top: 5%;
+  /* height: 60%; */
+}
+.auto-img {
+  width: 100%;
+}
+.submit {
+  /* position: absolute; */
+  width: 40%;
+  height: 40px;
+  font-size: 20px;
+  border-radius: 10px;
+  background: #6c5482;
+  color: #fff;
+  outline: none;
+  box-shadow: 2px 2px 2px 2px #aaa;
+
+  margin: 40px 30%;
+}
+.bottom {
+  position: fixed;
+  bottom: 0;
+  /* margin: 0 auto; */
+  text-align: center;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+.my-weather {
+  float: right;
+  font-size: 14px;
+  margin: 15px;
+  color: #777;
+  margin-top: 20px;
+}
+/* .location {
+  text-decoration: underline;
+} */

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/search.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1403563_8wxwwrm1i4h.css">
+</head>
+
+<body>
+    <div class="container">
+        <p class="title">
+            和·风
+        </p>
+        <span class="iconfont icon-suosou search-icon"></span>
+        <input type="text" placeholder="输入你要搜索的城市" id="search">
+        <a class="my-weather"><span class="iconfont icon-location"></span><span class="location">查看当前城市天气</span></a>
+        <button class="submit">搜索</button>
+        <div class="gif">
+            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1568142061314&di=922e15e766ea3d1cd441d6bd2d91ce93&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20181011%2F8e49a400001d4750969f74bc750c0f48.gif"
+                alt="" class="auto-img">
+        </div>
+        <p class="bottom">
+            本网页由我太难了&copy;出品
+        </p>
+    </div>
+    <script src="./js/jquery-3.4.1.min.js"></script>
+    <!-- <script src="./js/rem.js"></script> -->
+    <script>
+        var fn = function (data) {
+            var cityname = data.result.ad_info.city.toString()
+            localStorage.setItem("cityname", cityname)
+        }
+        $.ajax({
+            type: "get",
+            dataType: "jsonp",
+            url: "https://apis.map.qq.com/ws/location/v1/ip",
+            data: {
+                key: "UIQBZ-IJHCS-KPAOD-6BMJ6-7OOJV-5JFUF",
+                output: "jsonp"
+            },
+            jsonpCallback: 'fn'
+        })
+        $(function () {
+            $(".submit").on("click", function () {
+                var cityname = $("#search").val()
+                localStorage.setItem("cityname", cityname)
+                location.assign("index.html")
+            })
+            $(".my-weather").on("click", function () {
+                location.assign("index.html")
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/swiper.min.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1403563_0r80e4tbukj.css">
+
+</head>
+
+<body>
+    <div class="swiper-container">
+        <div class=" iconfont icon-fanhuijiantou back"></div>
+        <div class=" iconfont icon-xiaoshitianqiyubao hourly"></div>
+        <div class="swiper-wrapper">
+            <!-- <div class="swiper-slide" data-hash="slide1">
+                <div class="header">
+
+                    <span class="cityName">广州-今日天气</span>
+                </div>
+                <div class="max_area">
+                    <p class="max_title">最高温</p>
+                    <p class="max_number">27<sup>&#176</sup></p>
+                </div>
+                <div class="min_area">
+                    <p class="min_title">最低温</p>
+                    <p class="min_number">18<sup>&#176</sup></p>
+                </div>
+                <div class="day-area"><span class="title day-title active" data-type="day">早</span>/<span
+                        class="title night-title" data-type="night">晚</span></div>
+                <div class="w-icon-area day show">
+                    <div class="iconfont icon-tianqi-qing weather-icon">
+                    </div>
+                    <p class="weather-desc">晴天</p>
+                </div>
+                <div class="w-icon-area night ">
+                    <div class="iconfont icon-tianqi-yin weather-icon">
+                    </div>
+                    <p class="weather-desc">阴天</p>
+                </div>
+            </div> -->
+            <!-- <div class="swiper-slide" data-hash="slide2"></div>
+            <div class="swiper-slide" data-hash="slide3"></div>
+            <div class="swiper-slide" data-hash="slide4"></div>
+            <div class="swiper-slide" data-hash="slide5"></div>
+            <div class="swiper-slide" data-hash="slide6"></div>
+            <div class="swiper-slide" data-hash="slide7"></div>
+            <div class="swiper-slide" data-hash="slide8"></div>
+            <div class="swiper-slide" data-hash="slide9"></div>
+            <div class="swiper-slide" data-hash="slide10"></div> -->
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next swiper-button-white"></div>
+        <div class="swiper-button-prev swiper-button-white"></div>
+    </div>
+
+
+    <div class="hourly-ul rounded">
+        <!-- <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button> -->
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">小时</th>
+                    <th scope="col">天气类型</th>
+                    <th scope="col">降雨概率</th>
+                    <th scope="col">温度</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <th scope="row">0点</th>
+                    <td><span class="iconfont icon-tianqi-yin"></span>阴</td>
+                    <td>19&#176</td>
+
+                </tr> -->
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="./js/jquery-3.4.1.min.js"></script>
+
+    <script src="./js/swiper.min.js"></script>
+    <script src="./js/icon.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/rem.js"></script>
+    <!-- <script src="j"></script> -->
+    <script>
+        var cityname = localStorage.getItem("cityname")
+        cityname = cityname.toString()
+        var hourly = []
+        $.ajax({
+            type: "get",
+            url: "https://api.heweather.net/s6/weather/forecast",
+            data: {
+                location: cityname,
+                key: "5cdadaa2b957470ab04f1e968fce3d7c"
+            },
+            success: function (data) {
+                console.log(data.HeWeather6[0].daily_forecast)
+                if (data.HeWeather6[0].status == 'unknown location') {
+                    alert("没有相关数据")
+                    localStorage.removeItem("cityname")
+                    location.assign("zhuye.html")
+
+                    return
+                }
+                var num = 1
+                var arr = data.HeWeather6[0].daily_forecast
+                var location = data.HeWeather6[0].basic.location;
+                console.log(location)
+                for (var i = 0; i < 7; i++) {
+                    var date = arr[i].date
+                    var class_day = icon[arr[i].cond_code_d].class
+                    var class_night = icon[arr[i].cond_code_n].class
+                    date = date.split("-")
+                    var str = `${date[1]}月${date[2]}日`
+                    var $div = $(`<div class="swiper-slide" data-hash="slide${num}" data-index="${num}">
+                <div class="header">
+                    <span class="cityName">${str}天气</span>
+                </div>
+                <div class="max_area">
+                    <p class="max_title">最高温</p>
+                    <p class="max_number">${arr[i].tmp_max}<sup>&#176</sup></p>
+                </div>
+                <div class="min_area">
+                    <p class="min_title">最低温</p>
+                    <p class="min_number">${arr[i].tmp_min}<sup>&#176</sup></p>
+                </div>
+                 <div class="day-area"><span class=" title day-title active" data-type='day'>早</span>/<span class="title night-title" data-type='night'>晚</span></div>
+                <div class="w-icon-area day show">
+                    <div class="iconfont ${class_day} weather-icon">
+                    </div>
+                    <p class="weather-desc">${arr[i].cond_txt_d}</p>
+                </div>
+                <div class="w-icon-area night ">
+                    <div class="iconfont ${class_night} weather-icon">
+                    </div>
+                    <p class="weather-desc">${arr[i].cond_txt_n}</p>
+                </div>
+                 <ul class="footer">
+        <li class="footer-icon-area">
+            <span class="iconfont icon-jiangshuiliang jiangshuiyubao"></span>
+            <p class="jiangshui">降水概率</p>
+            <p class="jiangshui-num">${arr[i].pop}%</p>
+        </li>
+        <li class="footer-icon-area">
+            <span class="iconfont icon-xiangduishidu jiangshuiyubao shiduyubao"></span>
+            <p class="jiangshui shidu">相对湿度</p>
+            <p class="jiangshui-num shidu-num">${arr[i].hum}hpa</p>
+            </li>
+        <li class="footer-icon-area">
+            <span class="iconfont icon-ziwaixianzhishu ziwaixianyubao"></span>
+            <p class="jiangshui">紫外线指数</p>
+            <p class="jiangshui-num ziwaixian ziwaixian-num">${arr[i].uv_index}</p>
+            </li>
+    </ul>
+            </div>`)
+                    var $span = $(`<span class="swiper-pagination-bullet "></span>`)
+                    $(".swiper-pagination").append($span)
+                    // console.log($div)
+                    num++;
+                    $(".swiper-wrapper").append($div)
+                    if (i == 0) {
+                        $(".cityName").text(`${location}-今日天气`)
+                    }
+                    $(".title").on("click", function () {
+                        $(this).parent().children(".active").removeClass("active")
+                        $(this).addClass("active")
+                        var str = "." + $(this).data("type")
+                        var str1 = ".w-icon-area" + str
+                        // console.log($(".w-icon-area.night"))
+                        // console.log(str1)
+                        // console.log($(this).parent().siblings("str"))
+                        // var parent = $(this).parent().siblings(".w-icon-area str")
+                        $(this).parent().siblings(".w-icon-area.show").removeClass("show")
+                        $(this).parent().siblings(str1).addClass("show")
+
+                    })
+                }
+
+
+            }
+        })
+        var cityname = localStorage.getItem("cityname")
+        cityname = cityname.toString()
+        $.ajax({
+            type: 'get',
+            url: "https://api.heweather.net/s6/weather/hourly",
+            data: {
+                location: cityname,
+                key: "5cdadaa2b957470ab04f1e968fce3d7c"
+            },
+            success: function (data) {
+                // console.log(data)
+                if (data.HeWeather6[0].status == 'unknown location') {
+                    alert("没有相关数据")
+                    localStorage.removeItem("cityname")
+                    location.assign("search.html")
+                    return
+                }
+                hourly = data.HeWeather6[0].hourly
+                localStorage.setItem("hourly", JSON.stringify(hourly))
+                // console.log(Class)
+
+            },
+            isAsync: false
+
+        })
+        $(function () {
+            var hourly = JSON.parse(localStorage.getItem("hourly"))
+            console.log(hourly)
+            // var colorlist = ['linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);', '#89AF9B', '#C8C8A9', '#FC9D9A', '#2C3E50', '#84AF9B', '#FC9D99', '#AEDD81', '#FC9D9A', '#D0D0D0', '#D24D57', '#26A65B', '#EB7347']
+            var colorlist = ['linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%)', 'linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%)', 'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)', 'linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)', 'linear-gradient(to top, #d299c2 0%, #fef9d7 100%)', 'linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%)', 'linear-gradient(to top, #37ecba 0%, #72afd3 100%)', 'linear-gradient(to top, #feada6 0%, #f5efef 100%)', 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%)']
+            var swiper = new Swiper('.swiper-container', {
+                spaceBetween: 0,
+                hashNavigation: {
+                    watchState: true,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+                observer: true,
+                observeParents: true,
+                effect: 'flip',
+                flipEffect: {
+                    slideShadows: true,
+                    limitRotation: true,
+                },
+                on: {
+                    transitionEnd: function (event) {
+                        console.log(colorlist)
+                        var random = parseInt(Math.random() * (8 - 0 + 1) + 0, 10)
+                        // console.log(colorlist[random])   
+                        var $this = $(".swiper-slide-active")
+                        console.log(colorlist[random]);
+                        $(".swiper-slide").css({
+
+                            backgroundImage: colorlist[random]
+                        })
+                        $this.css({
+                            backgroundImage: colorlist[random]
+                        })
+                    }
+                }
+            });
+            $(".hourly").on("click", function () {
+                $("tbody").empty()
+
+                $(".hourly-ul").fadeToggle();
+                $(".hourly-ul").scrollTop("0")
+                var num = $(".swiper-slide-active").data("index")
+                var init = (num - 1) * 24
+                var length = (num) * 24
+
+                var time = 0
+                for (init; init < length; init++) {
+                    var class_w = icon[hourly[init].cond_code].class
+                    console.log(class_w)
+                    var $tr = $(`<tr>
+                    <th scope="row">${time}点</th>
+                    <td><span class="iconfont ${class_w}"></span>${hourly[init].cond_txt}</td>
+                    <td>${hourly[init].pop}%</td>
+                    <td>19&#176</td>
+
+                </tr>`)
+
+                    $("tbody").append($tr)
+                    time++
+                }
+                // $(".hourly-ul").css({ scrollTop: 0 })
+
+            })
+            $(".back").on("click", function () {
+                localStorage.removeItem("cityname")
+                location.assign("zhuye.html")
+            })
+
+        })
+    </script>
+</body>
+
+</html>
